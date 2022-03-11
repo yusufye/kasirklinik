@@ -1,0 +1,45 @@
+@page {
+	margin: 2mm;
+	width: 5.8cm;
+}
+
+body {
+	width: 5.8cm;
+	font-family: "Source Sans Pro";
+}
+
+#alamat {
+	font-size: 10px;
+}
+
+.center {
+	text-align: center;
+}
+
+.grayscale {
+	filter: grayscale(100%);
+}
+
+.logo {
+	width: 3cm;
+	height: 3cm;
+}
+
+.header,
+.header-space,
+.footer,
+.footer-space {
+	height: 4cm;
+}
+.header {
+	position: fixed;
+	top: 0;
+}
+.footer {
+	position: fixed;
+	bottom: 0;
+}
+
+.small {
+	font-size: 3px;
+}
