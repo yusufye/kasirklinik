@@ -288,6 +288,52 @@ class Kasir_model extends CI_Model
 
 	public function get_sales($sales_number)
 	{
+		$this->db->select([
+			'branch_id.sales_id',
+			'branch_id.branch_id',
+			'branch_id.sales_number',
+			'branch_id.total_price',
+			'branch_id.total_disc',
+			'branch_id.total_transaction',
+			'branch_id.payment_type',
+			'branch_id.bank_id',
+			'branch_id.card_holder',
+			'branch_id.card_number',
+			'branch_id.payment',
+			'branch_id.exchange',
+			'branch_id.notes',
+			'branch_id.creator_id',
+			'branch_id.created_date',
+		]);
+
+		$this->db->where('tblsales.sales_number', $sales_number);
+		$this->db->join('tbluser', 'tbluser.user_id = tblsales.creator_id', 'left');
+		$this->db->join('tblbank', 'tblbank.bank_id = tblsales.bank_id', 'left');
+		return $this->db->get('tblsales');
+	}
+
+	public function get_sales_for_print($sales_number)
+	{
+		$this->db->select([
+			'tblsales.sales_id',
+			'tblsales.branch_id',
+			'tblsales.sales_number',
+			'tblsales.total_price',
+			'tblsales.total_disc',
+			'tblsales.total_transaction',
+			'tblsales.payment_type',
+			'tblsales.bank_id',
+			'tblsales.card_holder',
+			'tblsales.card_number',
+			'tblsales.payment',
+			'tblsales.exchange',
+			'tblsales.notes',
+			'tblsales.creator_id',
+			'tblsales.created_date',
+			'tbluser.fullname',
+			'tblbank.bank_name'
+		]);
+
 		$this->db->where('tblsales.sales_number', $sales_number);
 		$this->db->join('tbluser', 'tbluser.user_id = tblsales.creator_id', 'left');
 		$this->db->join('tblbank', 'tblbank.bank_id = tblsales.bank_id', 'left');
@@ -300,6 +346,7 @@ class Kasir_model extends CI_Model
 			'tblitem.item_name',
 			'tblsales_det.qty',
 			'tblunit.unit_name',
+			'tblsales_det.price',
 			'tblsales_det.subtotal',
 		]);
 		$this->db->where('tblsales_det.sales_id', $sales_id);
