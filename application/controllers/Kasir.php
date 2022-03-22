@@ -14,6 +14,11 @@ class Kasir extends CI_Controller
 
 	public function index()
 	{
+		$sess = $this->kasir_theme->check_session();
+		if ($sess === false) {
+			redirect('logout');
+		}
+
 		$arr_list_item = $this->Kasir_model->get_list_item();
 		$arr_kategori  = $this->Kasir_model->get_list_kategori();
 		$arr_bank      = $this->Kasir_model->get_bank();
@@ -72,43 +77,58 @@ class Kasir extends CI_Controller
 
 	public function get_item($item_code)
 	{
+		$sess = $this->kasir_theme->check_session();
+		if ($sess === false) {
+			echo json_encode(['code' => 403]);
+			exit;
+		}
 		$where = "AND tblitem.item_code = '$item_code'";
 		$arr = $this->Kasir_model->get_list_item_where($where);
-		echo json_encode(['data' => $arr]);
+		echo json_encode(['code' => 200, 'data' => $arr]);
 	}
 
 	public function simpan()
 	{
-		$arr_keranjang = $this->input->post('keranjang');
-		$total         = $this->input->post('total');
-		$metode        = $this->input->post('metode');
-		$bank_id       = $this->input->post('bank');
-		$card_holder   = $this->input->post('nama_pemegang');
-		$card_number   = $this->input->post('no_kartu');
-		$payment       = str_replace(".", "", $this->input->post('bayar'));
-		$exchange      = $payment - $total;
-		$notes         = $this->input->post('catatan');
-		$branch_id     = $this->session->userdata(APP_ABBR . 'branch_id');
-		$sales_number  = $this->generateSalesNumber();
-		$creator_id    = $this->session->userdata(APP_ABBR . 'user_id');
-		$created_date  = date('Y-m-d H:i:s');
+		$sess = $this->kasir_theme->check_session();
+		if ($sess === false) {
+			echo json_encode(['code' => 403]);
+			exit;
+		}
 
-		if ($metode == "tunai") {
+		$this->db->trans_begin();
+
+		$branch_id         = $this->session->userdata(APP_ABBR . 'branch_id');
+		$sales_number      = $this->generateSalesNumber();
+		$total_price       = $this->input->post('total');
+		$total_disc        = $this->input->post('diskon_idr');
+		$total_transaction = $total_price - $total_disc;
+		$payment_type      = $this->input->post('metode');
+		$bank_id           = $this->input->post('bank');
+		$card_holder       = $this->input->post('nama_pemegang');
+		$card_number       = $this->input->post('no_kartu');
+		$payment           = $this->input->post('bayar');
+		$exchange          = $payment - $total_transaction;
+		$notes             = $this->input->post('catatan');
+		$creator_id        = $this->session->userdata(APP_ABBR . 'user_id');
+		$created_date      = date('Y-m-d H:i:s');
+		$arr_keranjang     = $this->input->post('keranjang');
+
+		if ($payment_type == "tunai") {
 			$payment_type = 1;
-		} elseif ($metode == "debit") {
+		} elseif ($payment_type == "debit") {
 			$payment_type = 2;
-		} elseif ($metode == "kredit") {
+		} elseif ($payment_type == "kredit") {
 			$payment_type = 3;
-		} elseif ($metode == "transfer") {
+		} elseif ($payment_type == "transfer") {
 			$payment_type = 4;
 		}
 
 		$data = [
 			'branch_id'         => $branch_id,
 			'sales_number'      => $sales_number,
-			'total_price'       => $total,
-			'total_disc'        => 0,
-			'total_transaction' => $total,
+			'total_price'       => $total_price,
+			'total_disc'        => $total_disc,
+			'total_transaction' => $total_transaction,
 			'payment_type'      => $payment_type,
 			'bank_id'           => $bank_id,
 			'card_holder'       => $card_holder,
@@ -121,32 +141,70 @@ class Kasir extends CI_Controller
 		];
 		$last_id_sales = $this->Kasir_model->store_sales($data);
 
-		$last_id_stock_out = $this->Kasir_model->save_stock_out($branch_id, $sales_number, $creator_id);
-
-		foreach ($arr_keranjang as $key) {
-			$item_id       = $key['item_id'];
-			$qty           = $key['qty'];
-			$sub_total     = $key['sub_total'];
-			$price         = $sub_total / $qty;
-
-			$data_det = [
-				'sales_id'     => $last_id_sales,
-				'item_id'      => $item_id,
-				'price'        => $price,
-				'disc'         => 0,
-				'extra_disc'   => 0,
-				'qty'          => $qty,
-				'subtotal'     => $sub_total,
-				'creator_id'   => $creator_id,
-				'created_date' => $created_date,
-			];
-			$this->Kasir_model->store_sales_det($data_det);
-			$this->Kasir_model->reduce_stock($qty, $branch_id, $item_id);
-			$this->Kasir_model->update_stock_flow($qty, $branch_id, $item_id, $price, $sales_number);
-			$this->Kasir_model->save_stock_out_det($last_id_stock_out, $item_id, $qty, $creator_id);
+		if (!$last_id_sales) {
+			$this->db->trans_rollback();
+			echo json_encode(['code' => 500, 'msg' => '[1] Proses Simpan Transaksi Gagal']);
+			exit;
 		}
 
-		echo json_encode(['sales_number' => $sales_number]);
+		$last_id_stock_out = $this->Kasir_model->save_stock_out($branch_id, $sales_number, $creator_id);
+
+		if (!$last_id_stock_out) {
+			$this->db->trans_rollback();
+			echo json_encode(['code' => 500, 'msg' => '[2] Proses Simpan Transaksi Gagal']);
+			exit;
+		}
+
+		if (count($arr_keranjang) > 0) {
+			foreach ($arr_keranjang as $key) {
+				$item_id   = $key['item_id'];
+				$qty       = $key['qty'];
+				$sub_total = $key['sub_total'];
+				$price     = $sub_total / $qty;
+
+				$data_det = [
+					'sales_id'     => $last_id_sales,
+					'item_id'      => $item_id,
+					'price'        => $price,
+					'disc'         => 0,
+					'extra_disc'   => 0,
+					'qty'          => $qty,
+					'subtotal'     => $sub_total,
+					'creator_id'   => $creator_id,
+					'created_date' => $created_date,
+				];
+				$exec = $this->Kasir_model->store_sales_det($data_det);
+				if (!$exec) {
+					$this->db->trans_rollback();
+					echo json_encode(['code' => 500, 'msg' => '[3] Proses Simpan Transaksi Gagal']);
+					exit;
+				}
+
+				$exec = $this->Kasir_model->reduce_stock($qty, $branch_id, $item_id);
+				if (!$exec) {
+					$this->db->trans_rollback();
+					echo json_encode(['code' => 500, 'msg' => '[4] Proses Simpan Transaksi Gagal']);
+					exit;
+				}
+
+				$exec = $this->Kasir_model->update_stock_flow($qty, $branch_id, $item_id, $price, $sales_number);
+				if (!$exec) {
+					$this->db->trans_rollback();
+					echo json_encode(['code' => 500, 'msg' => '[5] Proses Simpan Transaksi Gagal']);
+					exit;
+				}
+
+				$exec = $this->Kasir_model->save_stock_out_det($last_id_stock_out, $item_id, $qty, $creator_id);
+				if (!$exec) {
+					$this->db->trans_rollback();
+					echo json_encode(['code' => 500, 'msg' => '[6] Proses Simpan Transaksi Gagal']);
+					exit;
+				}
+			}
+		}
+
+		$this->db->trans_commit();
+		echo json_encode(['code' => 200, 'sales_number' => $sales_number]);
 	}
 
 	protected function generateSalesNumber()
@@ -166,7 +224,7 @@ class Kasir extends CI_Controller
 	public function print($sales_number)
 	{
 		$arr_company   = $this->Kasir_model->get_company_info();
-		$arr_sales     = $this->Kasir_model->get_sales($sales_number);
+		$arr_sales     = $this->Kasir_model->get_sales_for_print($sales_number);
 		$arr_sales_det = $this->Kasir_model->get_sales_det($arr_sales->row()->sales_id);
 
 		$data = [
@@ -175,7 +233,7 @@ class Kasir extends CI_Controller
 			'arr_sales'     => $arr_sales,
 			'arr_sales_det' => $arr_sales_det,
 		];
-		$this->load->view('theme/struk_bootstrap', $data);
+		$this->load->view('theme/struk', $data);
 	}
 
 	public function check_stock($item_id)

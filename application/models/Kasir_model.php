@@ -357,7 +357,7 @@ class Kasir_model extends CI_Model
 
 	public function reduce_stock($qty, $branch_id, $item_id)
 	{
-		$this->db->query("UPDATE tblitem_stock SET qty = qty - '$qty' WHERE branch_id='$branch_id' AND item_id = '$item_id'");
+		return $this->db->query("UPDATE tblitem_stock SET qty = qty - '$qty' WHERE branch_id='$branch_id' AND item_id = '$item_id'");
 	}
 
 	public function save_stock_out($branch_id, $sales_number, $creator_id)
@@ -368,7 +368,7 @@ class Kasir_model extends CI_Model
 
 	public function save_stock_out_det($last_id_stock_out, $item_id, $qty, $creator_id)
 	{
-		$this->db->query("INSERT INTO tblstock_out_det (stock_out_id, item_id, qty,creator_id, created_date) values ('$last_id_stock_out', '$item_id', '$qty', '$creator_id', NOW())");
+		return $this->db->query("INSERT INTO tblstock_out_det (stock_out_id, item_id, qty,creator_id, created_date) values ('$last_id_stock_out', '$item_id', '$qty', '$creator_id', NOW())");
 	}
 
 	public function update_stock_flow($qty, $branch_id, $item_id, $price, $sales_number)
@@ -424,6 +424,8 @@ class Kasir_model extends CI_Model
 				}
 			}
 		}
+
+		return $query;
 	}
 
 	public function check_password($user_id, $password_lama)

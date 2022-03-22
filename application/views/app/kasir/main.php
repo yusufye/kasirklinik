@@ -137,6 +137,25 @@
 						</tr>
 						<tr>
 							<th>
+								Diskon
+							</th>
+							<th>
+								<div class="input-group">
+									<input type="text" class="form-control form-control-sm" id="diskon_persen" name="diskon_persen" placeholder="%" accesskey="5" title="Alt + 5" />
+									<input type="text" class="form-control form-control-sm" id="diskon_idr" name="diskon_idr" placeholder="Rp" accesskey="6" title="Alt + 6" />
+								</div>
+							</th>
+						</tr>
+						<tr>
+							<th>
+								Grand Total
+							</th>
+							<th class="text-right">
+								<h2 id="grand_total_finale"></h2>
+							</th>
+						</tr>
+						<tr>
+							<th>
 								Bayar
 							</th>
 							<th>
