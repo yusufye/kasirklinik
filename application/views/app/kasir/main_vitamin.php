@@ -76,7 +76,9 @@
 		$('#pagination').on('click', 'a', function(e) {
 			e.preventDefault();
 			let offset = $(this).attr('data-ci-pagination-page');
-			renderCard(category_id, offset)
+			if (offset != undefined) {
+				renderCard(category_id, offset)
+			}
 		})
 
 		renderCard('default', 0)

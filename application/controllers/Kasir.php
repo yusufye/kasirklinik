@@ -51,20 +51,25 @@ class Kasir extends CI_Controller
 		$config['per_page']         = $per_page;
 		$config['uri_segment']      = 4;
 
+		$config['attributes']      = ['class' => 'page-link'];
+		$config['first_link']      = false;
+		$config['last_link']       = false;
 		$config['full_tag_open']   = '<div class="pagging text-center"><nav><ul class="pagination pagination-lg justify-content-center">';
 		$config['full_tag_close']  = '</ul></nav></div>';
-		$config['num_tag_open']    = '<li class="page-item"><span class="page-link">';
+		$config['num_tag_open']    = '<li class="page-item"><span class="">';
 		$config['num_tag_close']   = '</span></li>';
-		$config['cur_tag_open']    = '<li class="page-item active"><span class="page-link">';
-		$config['cur_tag_close']   = '<span class="sr-only">(current)</span></span></li>';
-		$config['next_tag_open']   = '<li class="page-item"><span class="page-link">';
+		$config['cur_tag_open']    = '<li class="page-item active"><a href="#" class="page-link" id="aktif">';
+		$config['cur_tag_close']   = '<span class="sr-only">(current)</span></a></li>';
+		$config['next_tag_open']   = '<li class="page-item"><span class="">';
 		$config['next_tag_close']  = '<span aria-hidden="true"></span></span></li>';
-		$config['prev_tag_open']   = '<li class="page-item"><span class="page-link">';
+		$config['prev_tag_open']   = '<li class="page-item"><span class="">';
 		$config['prev_tag_close']  = '</span></li>';
-		$config['first_tag_open']  = '<li class="page-item"><span class="page-link">';
+		$config['first_tag_open']  = '<li class="page-item"><span class="">';
 		$config['first_tag_close'] = '</span></li>';
-		$config['last_tag_open']   = '<li class="page-item"><span class="page-link">';
+		$config['last_tag_open']   = '<li class="page-item"><span class="">';
 		$config['last_tag_close']  = '</span></li>';
+		$config['prev_link']       = '&laquo';
+		$config['next_link']       = '&raquo';
 
 		$this->pagination->initialize($config);
 
@@ -233,7 +238,7 @@ class Kasir extends CI_Controller
 			'arr_sales'     => $arr_sales,
 			'arr_sales_det' => $arr_sales_det,
 		];
-		$this->load->view('theme/struk', $data);
+		$this->load->view('theme/struk_old', $data);
 	}
 
 	public function check_stock($item_id)
