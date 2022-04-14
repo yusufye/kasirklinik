@@ -14,7 +14,10 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<!-- <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,500;0,700;1,300;1,500;1,700&display=swap" rel="stylesheet"> -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
 	<!-- Bootstrap CSS -->
@@ -47,9 +50,31 @@
 	<link rel="manifest" href="<?= base_url('assets/img/favicon/manifest.json'); ?>">
 
 	<title>Kasir | <?= APP_NAME; ?></title>
+
+	<style>
+		.swal2-title {
+			font-size: .9rem !important;
+		}
+
+		body.swal2-toast-shown .swal2-container {
+			box-sizing: border-box !important;
+			width: 300px !important;
+			max-width: 100% !important;
+			background-color: transparent !important;
+			pointer-events: none !important;
+		}
+
+		.swal2-popup.swal2-toast {
+			padding: .6em !important;
+		}
+
+		.swal2-html-container {
+			font-size: .8em !important;
+		}
+	</style>
 </head>
 
-<body class="bg-primary">
+<body class="bg-primary" style="padding-bottom:70px;">
 	<div class="container-fluid">
 		<?php $this->load->view('theme/navbar'); ?>
 		<?php $this->load->view('app/' . $content); ?>

@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg fixed-bottom navbar-dark bg-dark">
 	<div class="navbar-brand">
 		<img src="<?= base_url('assets/img/logo swr frozen food.jpeg'); ?>" alt="LOGO <?= APP_NAME; ?>" class="img-fluid" style="width: 50px;" />
-		<a href="https://trijayasolution.co.id/" target="_blank" class="text-white" style="font-size: 14px;"><i class="fas fa-copyright fa-fw"></i> CV. Trijaya Solution — <?= APP_VERSION; ?></a>
+		<!-- <a href="https://trijayasolution.co.id/" target="_blank" class="text-white" style="font-size: 14px;"><i class="fas fa-copyright fa-fw"></i> CV. Trijaya Solution — <?= APP_VERSION; ?></a> -->
 	</div>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -18,7 +18,7 @@
 				<i class="fas fa-user fa-fw"></i> Ganti Password
 			</a>
 			<a class="nav-link" href="<?= base_url('logout'); ?>">
-				<i class="fas fa-sign-out-alt fa-fw"></i> Keluar
+				<i class="fas fa-sign-out-alt fa-fw"></i> <?= $this->session->userdata(APP_ABBR . 'name'); ?> Keluar
 			</a>
 		</div>
 		<div class="navbar-nav ml-auto">

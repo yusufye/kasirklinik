@@ -48,27 +48,56 @@ class Kasir_model extends CI_Model
 
 	public function get_list_item_where($where)
 	{
+
 		$sql = "
-		SELECT DISTINCT
+		SELECT
 			tblitem.item_id,
 			tblitem.item_code,
 			tblitem.item_name,
 			tblitem.foto_filename,
 			tblunit.unit_name,
-			MAX( tblitem_price.start_period ) AS start_period,
-			MAX( tblitem_price.buying_price ) AS buying_price,
-			MAX( tblitem_price.selling_price ) AS selling_price,
-			tblitem_stock.qty
+			tblitem_stock.qty,
+			(
+				SELECT
+					tblitem_price.start_period 
+				FROM
+					tblitem_price 
+				WHERE
+					tblitem_price.start_period <= NOW() 
+					AND tblitem_price.item_id = tblitem.item_id 
+				ORDER BY
+					tblitem_price.start_period DESC 
+					LIMIT 1 
+			) AS start_period,
+			(
+				SELECT
+					tblitem_price.buying_price 
+				FROM
+					tblitem_price 
+				WHERE
+					tblitem_price.start_period <= NOW() 
+					AND tblitem_price.item_id = tblitem.item_id 
+				ORDER BY
+					tblitem_price.start_period DESC 
+					LIMIT 1 
+			) AS buying_price,
+			(
+				SELECT
+					tblitem_price.selling_price 
+				FROM
+					tblitem_price 
+				WHERE
+					tblitem_price.start_period <= NOW() 
+					AND tblitem_price.item_id = tblitem.item_id 
+				ORDER BY
+					tblitem_price.start_period DESC 
+					LIMIT 1 
+			) AS selling_price 
 		FROM
-			tblitem
-			LEFT JOIN tblitem_price ON tblitem_price.item_id = tblitem.item_id 
+			tblitem 
 			LEFT JOIN tblunit ON tblunit.unit_id = tblitem.unit_id
-			LEFT JOIN tblitem_stock ON tblitem_stock.item_id = tblitem.item_id 
-		WHERE
-			start_period <= NOW() 
+			LEFT JOIN tblitem_stock ON tblitem_stock.item_id = tblitem.item_id
 		$where
-		GROUP BY
-			tblitem_price.item_id 
 		ORDER BY
 			tblitem.item_name ASC
 		";
@@ -127,22 +156,51 @@ class Kasir_model extends CI_Model
 			$nest['children'] = [];
 
 			$sql = "
-			SELECT DISTINCT
+			SELECT
 				tblitem.item_id,
 				tblitem.item_code,
 				tblitem.item_name,
 				tblitem.foto_filename,
-				MAX( tblitem_price.start_period ) AS start_period,
-				MAX( tblitem_price.buying_price ) AS buying_price,
-				MAX( tblitem_price.selling_price ) AS selling_price 
+				(
+				SELECT
+					tblitem_price.start_period 
+				FROM
+					tblitem_price 
+				WHERE
+					tblitem_price.start_period <= NOW() 
+					AND tblitem_price.item_id = tblitem.item_id 
+				ORDER BY
+					tblitem_price.start_period DESC 
+					LIMIT 1 
+				) AS start_period,
+				(
+				SELECT
+					tblitem_price.buying_price 
+				FROM
+					tblitem_price 
+				WHERE
+					tblitem_price.start_period <= NOW() 
+					AND tblitem_price.item_id = tblitem.item_id 
+				ORDER BY
+					tblitem_price.start_period DESC 
+					LIMIT 1 
+				) AS buying_price,
+				(
+				SELECT
+					tblitem_price.selling_price 
+				FROM
+					tblitem_price 
+				WHERE
+					tblitem_price.start_period <= NOW() 
+					AND tblitem_price.item_id = tblitem.item_id 
+				ORDER BY
+					tblitem_price.start_period DESC 
+					LIMIT 1 
+				) AS selling_price 
 			FROM
-				tblitem
-				LEFT JOIN tblitem_price ON tblitem_price.item_id = tblitem.item_id
-			WHERE
-				start_period <= NOW() 
-			AND tblitem.merk_id = $id_merk
-			GROUP BY
-				tblitem_price.item_id 
+				tblitem 
+			WHERE 
+				tblitem.merk_id = $id_merk
 			ORDER BY
 				tblitem.item_name ASC
 			";
@@ -168,26 +226,54 @@ class Kasir_model extends CI_Model
 	{
 		$where = null;
 		if ($category_id != 'default') {
-			$where = "AND tblitem.stock_category_id = $category_id";
+			$where = "WHERE tblitem.stock_category_id = $category_id";
 		}
 
 		$sql = "
-		SELECT DISTINCT
+		SELECT
 			tblitem.item_id,
 			tblitem.item_code,
 			tblitem.item_name,
 			tblitem.foto_filename,
-			MAX( tblitem_price.start_period ) AS start_period,
-			MAX( tblitem_price.buying_price ) AS buying_price,
-			MAX( tblitem_price.selling_price ) AS selling_price 
+			(
+			SELECT
+				tblitem_price.start_period 
+			FROM
+				tblitem_price 
+			WHERE
+				tblitem_price.start_period <= NOW() 
+				AND tblitem_price.item_id = tblitem.item_id 
+			ORDER BY
+				tblitem_price.start_period DESC 
+				LIMIT 1 
+			) AS start_period,
+			(
+			SELECT
+				tblitem_price.buying_price 
+			FROM
+				tblitem_price 
+			WHERE
+				tblitem_price.start_period <= NOW() 
+				AND tblitem_price.item_id = tblitem.item_id 
+			ORDER BY
+				tblitem_price.start_period DESC 
+				LIMIT 1 
+			) AS buying_price,
+			(
+			SELECT
+				tblitem_price.selling_price 
+			FROM
+				tblitem_price 
+			WHERE
+				tblitem_price.start_period <= NOW() 
+				AND tblitem_price.item_id = tblitem.item_id 
+			ORDER BY
+				tblitem_price.start_period DESC 
+				LIMIT 1 
+			) AS selling_price 
 		FROM
-			tblitem
-			LEFT JOIN tblitem_price ON tblitem_price.item_id = tblitem.item_id 
-		WHERE
-			start_period <= NOW() 
+			tblitem 
 		$where
-		GROUP BY
-			tblitem_price.item_id 
 		ORDER BY
 			tblitem.item_name ASC
 		";
@@ -201,28 +287,56 @@ class Kasir_model extends CI_Model
 	{
 		$where = null;
 		if ($category_id != 'default') {
-			$where = "AND tblitem.stock_category_id = $category_id";
+			$where = "WHERE tblitem.stock_category_id = $category_id";
 		}
 
 		$data = [];
 
 		$sql = "
-		SELECT DISTINCT
+		SELECT
 			tblitem.item_id,
 			tblitem.item_code,
 			tblitem.item_name,
 			tblitem.foto_filename,
-			MAX( tblitem_price.start_period ) AS start_period,
-			MAX( tblitem_price.buying_price ) AS buying_price,
-			MAX( tblitem_price.selling_price ) AS selling_price 
+			(
+			SELECT
+				tblitem_price.start_period 
+			FROM
+				tblitem_price 
+			WHERE
+				tblitem_price.start_period <= NOW() 
+				AND tblitem_price.item_id = tblitem.item_id 
+			ORDER BY
+				tblitem_price.start_period DESC 
+				LIMIT 1 
+			) AS start_period,
+			(
+			SELECT
+				tblitem_price.buying_price 
+			FROM
+				tblitem_price 
+			WHERE
+				tblitem_price.start_period <= NOW() 
+				AND tblitem_price.item_id = tblitem.item_id 
+			ORDER BY
+				tblitem_price.start_period DESC 
+				LIMIT 1 
+			) AS buying_price,
+			(
+			SELECT
+				tblitem_price.selling_price 
+			FROM
+				tblitem_price 
+			WHERE
+				tblitem_price.start_period <= NOW() 
+				AND tblitem_price.item_id = tblitem.item_id 
+			ORDER BY
+				tblitem_price.start_period DESC 
+				LIMIT 1 
+			) AS selling_price 
 		FROM
-			tblitem
-			LEFT JOIN tblitem_price ON tblitem_price.item_id = tblitem.item_id 
-		WHERE
-			start_period <= NOW() 
+			tblitem 
 		$where
-		GROUP BY
-			tblitem_price.item_id 
 		ORDER BY
 			tblitem.item_name ASC
 		LIMIT $limit

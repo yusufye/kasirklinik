@@ -87,7 +87,7 @@ class Kasir extends CI_Controller
 			echo json_encode(['code' => 403]);
 			exit;
 		}
-		$where = "AND tblitem.item_code = '$item_code'";
+		$where = "WHERE tblitem.item_code = '$item_code'";
 		$arr = $this->Kasir_model->get_list_item_where($where);
 		echo json_encode(['code' => 200, 'data' => $arr]);
 	}
@@ -243,7 +243,7 @@ class Kasir extends CI_Controller
 
 	public function check_stock($item_id)
 	{
-		$where = "AND tblitem.item_id = '$item_id'";
+		$where = "WHERE tblitem.item_id = '$item_id'";
 		$arr = $this->Kasir_model->get_list_item_where($where);
 		echo json_encode(['data' => $arr]);
 	}

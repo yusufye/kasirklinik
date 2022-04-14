@@ -180,7 +180,7 @@
 			url: `<?= base_url(); ?>kasir/get_card/${category_id}/${offset}`,
 			type: 'get',
 			dataType: 'json',
-			beforeSend: () => $('#group_card').block({
+			beforeSend: () => $('#group_card').parent().block({
 				message: `<i class="fas fa-spinner fa-spin"></i>`
 			}).attr('disabled', true)
 		}).fail(e => {
@@ -188,7 +188,7 @@
 				icon: 'warning',
 				html: e.responseText,
 			}).then(() => {
-				$('#group_card').unblock()
+				$('#group_card').parent().unblock()
 			})
 		}).done(e => {
 			$('#pagination').html(e.pagination);
@@ -213,10 +213,10 @@
 
 			let htmlnya = `
 			<div class="col col-md-3 my-2">
-				<div class="card" style="min-height: 300px; height: 100%;" onClick="tambahKeranjang(${item_code})" role="button">
+				<div class="card" style="min-height: 40px; height: 100%;" onClick="tambahKeranjang(${item_code})" role="button">
 					<img class="card-img-top img-fluid" src="${foto_filename}" alt="${item_name}">
-					<div class="card-body" style="font-size: 0.9rem;">
-						<h5 class="card-title text-center" style="font-size: 0.8rem;"><strong>${item_name}</strong></h5>
+					<div class="card-body">
+						<h5 class="card-title text-center" style="font-size: 0.7rem;"><strong>${item_name}</strong></h5>
 					</div>
 					<div class="card-footer text-right">
 						<p class="card-text"><strong>Rp.${selling_price_idr}</strong></p>
@@ -227,7 +227,7 @@
 			$('#group_card').append(htmlnya);
 		}
 
-		$('#group_card').unblock()
+		$('#group_card').parent().unblock()
 	}
 
 	function tambahKeranjang(barcode) {
@@ -236,9 +236,9 @@
 			type: 'get',
 			dataType: 'json',
 			beforeSend: () => {
-				$.blockUI({
-					message: `<i class="fas fa-spinner fa-spin"></i>`
-				})
+				// $.blockUI({
+				// 	message: `<i class="fas fa-spinner fa-spin"></i>`
+				// })
 				$('#item_code').val('').trigger('change')
 			}
 		}).fail(e => {
@@ -302,6 +302,7 @@
 								qty: 1,
 								satuan: unit_name,
 								selling_price: selling_price,
+								selling_price_idr: selling_price_idr,
 								sub_total: selling_price,
 								sub_total_idr: selling_price_idr,
 							}
@@ -314,7 +315,7 @@
 								toast: true,
 								position: 'top-end',
 								showConfirmButton: false,
-								timer: 2000
+								timer: 1000
 							})
 						} else {
 							if (qty < (parseInt(hasil_pencarian.qty) + 1)) {
@@ -363,19 +364,24 @@
 			$.each(keranjang.reverse(), (i, k) => {
 				htmlnya += `
 				<tr>
-					<th style="width: 35px;">
-						<span role="button" onClick="hapusKeranjang(${k.item_id}, '${k.item_name}')"><i class="fas fa-trash"></i></span>
+					<th style="width: 5px;">
+						<button type="button" class="btn btn-danger btn-sm" onClick="hapusKeranjang(${k.item_id}, '${k.item_name}')"><i class="fas fa-trash"></i></button>
 					</th>
-					<th style="width: 140px;">${k.item_name}</th>
-					<th style="width: 120px;">
-						<div class="input-group input-group-sm">
-							<input type="number" min="1" class="form-control form-control-sm qty_keranjang" id="qty_keranjang_${k.item_id}" value="${k.qty}" onChange="updateQty('qty_keranjang_${k.item_id}', ${k.item_id});" />
+					<th>${k.item_name}</th>
+					<th class="text-right" style="width: 105px;">Rp.${k.selling_price_idr}</th>
+					<th style="width: 200px;">
+						<div class="input-group input-group-xs">
+						<div class="input-group-prepend">
+						<button type="button" class="btn btn-danger btn-sm" onClick="decreseQty('qty_keranjang_${k.item_id}');"><i class="fas fa-minus"></i></button>
+						</div>
+							<input type="text" min="1" onkeypress="return isNumberKey(event)" class="form-control qty_keranjang nonly" id="qty_keranjang_${k.item_id}" value="${k.qty}" onChange="updateQty('qty_keranjang_${k.item_id}', ${k.item_id});" />
 							<div class="input-group-append">
 								<span class="input-group-text">${k.satuan}</span>
+								<button type="button" class="btn btn-success btn-sm" onClick="increaseQty('qty_keranjang_${k.item_id}');"><i class="fas fa-plus"></i></button>
 							</div>
 						</div>
 					</th>
-					<th class="text-right" style="width: 100px;">Rp.${k.sub_total_idr}</th>
+					<th class="text-right" style="width: 105px;">Rp.${k.sub_total_idr}</th>
 				</tr>
 				`
 
@@ -636,9 +642,9 @@
 			type: 'get',
 			dataType: 'json',
 			beforeSend: () => {
-				$.blockUI({
-					message: `<i class="fas fa-spinner fa-spin"></i>`
-				})
+				// $.blockUI({
+				// 	message: `<i class="fas fa-spinner fa-spin"></i>`
+				// })
 			}
 		}).fail(e => {
 			Swal.fire({
@@ -865,5 +871,24 @@
 			currency: 'IDR',
 			minimumFractionDigits: 0
 		}).format(grand_total_finale))
+	}
+
+	function isNumberKey(evt) {
+		var charCode = (evt.which) ? evt.which : evt.keyCode
+		if (charCode > 31 && (charCode < 48 || charCode > 57))
+			return false;
+		return true;
+	}
+
+	function decreseQty(selector) {
+		let a = $(`#${selector}`).val();
+		let b = ((parseInt(a) - 1) < 0) ? 0 : parseInt(a) - 1;
+		$(`#${selector}`).val(b).trigger('change');
+	}
+
+	function increaseQty(selector) {
+		let a = $(`#${selector}`).val();
+		let b = parseInt(a) + 1
+		$(`#${selector}`).val(b).trigger('change');
 	}
 </script>

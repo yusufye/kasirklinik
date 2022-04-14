@@ -1,5 +1,5 @@
 <div class="row mt-2">
-	<div class="col-sm-12 col-md-8">
+	<div class="col-sm-12 col-md-6">
 		<div class="row">
 			<div class="col-sm-12 col-md-4">
 				<div class="form-group">
@@ -63,14 +63,14 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-12 col-md-4">
+	<div class="col-sm-12 col-md-6">
 		<div class="card mt-1 bg-dark mh-100">
 			<div class="card-header text-white text-center">
-				<h5>Keranjang Belanja</h5>
+				<h5 style="font-size: 0.9rem;">Keranjang Belanja</h5>
 			</div>
 			<div class="card-body text-white pt-1 pr-0 pb-0 pl-0">
-				<div class="table-responsive" style="height: 30vh;">
-					<table id="v_keranjang" class="table table-borderless table-striped text-white" style="font-size: 0.9rem;">
+				<div class="table-responsive" style="height: 24vh;">
+					<table id="v_keranjang" class="table table-borderless table-striped text-white" style="font-size: 0.7rem;">
 						<tbody>
 							<?php //for ($i = 0; $i < 10; $i++) { 
 							?>
@@ -85,12 +85,12 @@
 					</table>
 				</div>
 				<hr />
-				<table class="table table-borderless text-white" style="font-size: 0.9rem;">
+				<table class="table table-borderless text-white">
 					<tbody>
 						<tr>
 							<th>Metode Pembayaran</th>
-							<th>
-								<select class="form-control form-control-sm" id="metode_pembayaran" name="metode_pembayaran" accesskey="m" title="Alt + M">
+							<th class="d-flex justify-content-end">
+								<select class="form-control form-control-sm" id="metode_pembayaran" name="metode_pembayaran" accesskey="m" title="Alt + M" style="width: 100px;">
 									<option value="tunai">Tunai</option>
 									<option value="debit">Debit</option>
 									<option value="kredit">Kredit</option>
@@ -132,16 +132,21 @@
 								Total
 							</th>
 							<th class="text-right">
-								<h2 id="grand_total"></h2>
+								<h5 id="grand_total"></h5>
 							</th>
 						</tr>
 						<tr>
 							<th>
 								Diskon
 							</th>
-							<th>
-								<div class="input-group">
+							<th class="d-flex justify-content-end">
+								<div class="input-group" style="width: 200px;">
 									<input type="text" class="form-control form-control-sm" id="diskon_persen" name="diskon_persen" placeholder="%" accesskey="5" title="Alt + 5" />
+									<div class="input-group-append">
+										<span class="input-group-text">%</span>
+										<span class="input-group-text bg-dark">&nbsp;</span>
+										<span class="input-group-text">Rp.</span>
+									</div>
 									<input type="text" class="form-control form-control-sm" id="diskon_idr" name="diskon_idr" placeholder="Rp" accesskey="6" title="Alt + 6" />
 								</div>
 							</th>
@@ -151,15 +156,15 @@
 								Grand Total
 							</th>
 							<th class="text-right">
-								<h2 id="grand_total_finale"></h2>
+								<h5 id="grand_total_finale"></h5>
 							</th>
 						</tr>
 						<tr>
 							<th>
 								Bayar
 							</th>
-							<th>
-								<input type="text" class="form-control form-control-sm" id="nominal_bayar" name="nominal_bayar" placeholder="Nominal Bayar" accesskey="u" title="Alt + U" />
+							<th class="d-flex justify-content-end">
+								<input type="text" class="form-control form-control-sm" id="nominal_bayar" name="nominal_bayar" placeholder="Nominal Bayar" accesskey="u" title="Alt + U" style="width: 100px;" />
 							</th>
 						</tr>
 						<tr>
@@ -167,18 +172,18 @@
 								Kembalian
 							</th>
 							<th class="text-right">
-								<h2 id="kembalian">Rp.0</h2>
+								<h5 id="kembalian">Rp.0</h5>
 							</th>
 						</tr>
 						<tr>
 							<th colspan="2" class="px-3 py-0">
-								<button type="button" class="btn btn-primary btn-block" id="btn_pembayaran" accesskey="s" title="Alt + S" disabled>
+								<button type="button" class="btn btn-primary btn-sm btn-block" id="btn_pembayaran" accesskey="s" title="Alt + S" disabled>
 									<i class="fas fa-file-invoice-dollar fa-fw"></i> Pembayaran
 								</button>
-								<button type="button" class="btn btn-success btn-block" id="btn_print" accesskey="p" title="Alt + P" disabled>
+								<button type="button" class="btn btn-success btn-sm btn-block" id="btn_print" accesskey="p" title="Alt + P" disabled>
 									<i class="fas fa-print fa-fw"></i> Print Struk
 								</button>
-								<button type="button" class="btn btn-info btn-block" id="btn_transaksi_baru" accesskey="n" title="Alt + N" disabled>
+								<button type="button" class="btn btn-info btn-sm btn-block" id="btn_transaksi_baru" accesskey="n" title="Alt + N" disabled>
 									<i class="fas fa-cart-plus fa-fw"></i> Transaksi Baru
 								</button>
 							</th>
