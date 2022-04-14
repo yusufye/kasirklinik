@@ -67,15 +67,34 @@ section {
 
 body {
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Source Sans Pro",
-		"Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-		"Apple Color Emoji", "Kanit Emoji", "Kanit Symbol", "Noto Color Emoji";
-	font-size: 1rem;
+	font-family: -apple-system, BlinkMacSystemFont, "Lato", sans-serif,
+		"Source Sans Pro", "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans",
+		sans-serif, "Apple Color Emoji", "Kanit Emoji", "Kanit Symbol",
+		"Noto Color Emoji";
+	font-size: 0.7rem;
 	font-weight: 400;
 	line-height: 1.5;
 	color: #212529;
 	text-align: left;
 	background-color: #fff;
+}
+
+.input-group-xs .input-group-text {
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-align: center;
+	align-items: center;
+	padding: 0rem 0.1rem;
+	margin-bottom: 0;
+	font-size: 0.7rem;
+	font-weight: 400;
+	line-height: 1;
+	color: #495057;
+	text-align: center;
+	white-space: nowrap;
+	background-color: #e9ecef;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -386,9 +405,10 @@ h6,
 .h4,
 .h5,
 .h6 {
-	margin-bottom: 0.5rem;
+	margin-top: 0.3rem;
+	margin-bottom: 0.3rem;
 	font-weight: 500;
-	line-height: 1.2;
+	line-height: 1;
 }
 
 h1,
@@ -2115,9 +2135,9 @@ pre code {
 .form-control {
 	display: block;
 	width: 100%;
-	height: calc(1.5em + 0.75rem + 2px);
-	padding: 0.375rem 0.75rem;
-	font-size: 1rem;
+	height: calc(1em + 0.5rem + 1px);
+	padding: 0.3rem 0.5rem;
+	font-size: 0.9rem;
 	font-weight: 400;
 	line-height: 1.5;
 	color: #495057;
@@ -2246,10 +2266,10 @@ select.form-control:focus::-ms-value {
 }
 
 .form-control-sm {
-	height: calc(1.5em + 0.5rem + 2px);
-	padding: 0.25rem 0.5rem;
-	font-size: 0.875rem;
-	line-height: 1.5;
+	height: calc(1em + 0.5rem + 1px);
+	padding: 0rem 0.3rem;
+	font-size: 0.8rem;
+	line-height: 1;
 	border-radius: 0.2rem;
 }
 
@@ -3383,9 +3403,9 @@ fieldset:disabled a.btn {
 
 .btn-sm,
 .btn-group-sm > .btn {
-	padding: 0.25rem 0.5rem;
-	font-size: 0.875rem;
-	line-height: 1.5;
+	padding: 0.18rem 0.3rem;
+	font-size: 0.8rem;
+	line-height: 1;
 	border-radius: 0.2rem;
 }
 
@@ -3957,11 +3977,11 @@ input[type="button"].btn-block {
 	display: flex;
 	-ms-flex-align: center;
 	align-items: center;
-	padding: 0.375rem 0.75rem;
+	padding: 0.1rem 0.3rem;
 	margin-bottom: 0;
-	font-size: 1rem;
-	font-weight: 400;
-	line-height: 1.5;
+	font-size: 0.8rem;
+	font-weight: 800;
+	line-height: 1;
 	color: #495057;
 	text-align: center;
 	white-space: nowrap;
@@ -5162,7 +5182,7 @@ input[type="button"].btn-block {
 	-ms-flex: 1 1 auto;
 	flex: 1 1 auto;
 	min-height: 1px;
-	padding: 1.25rem;
+	padding: 0.8rem;
 }
 
 .card-title {
@@ -5187,7 +5207,7 @@ input[type="button"].btn-block {
 }
 
 .card-header {
-	padding: 0.75rem 1.25rem;
+	padding: 0.1rem 1rem;
 	margin-bottom: 0;
 	background-color: rgba(0, 0, 0, 0.03);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
@@ -5457,8 +5477,8 @@ input[type="button"].btn-block {
 }
 
 .pagination-lg .page-link {
-	padding: 0.75rem 1.5rem;
-	font-size: 1.25rem;
+	padding: 0.5rem 1rem;
+	font-size: 0.8rem;
 	line-height: 1.5;
 }
 
@@ -10756,3 +10776,8 @@ a.text-dark:focus {
 	}
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+.input-group-xs > .form-control:not(textarea),
+.input-group-xs > .custom-select {
+	height: calc(1em + 0.5rem + 1px);
+}
