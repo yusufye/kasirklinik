@@ -52,6 +52,12 @@
 	<title>Kasir | <?= APP_NAME; ?></title>
 
 	<style>
+		.grand_total_view {
+			font-size: 1.4rem;
+			font-family: 'Orbitron';
+			color: white;
+		}
+
 		.swal2-title {
 			font-size: .9rem !important;
 		}
@@ -74,7 +80,7 @@
 	</style>
 </head>
 
-<body class="bg-primary" style="padding-bottom:70px;">
+<body class="bg-primary" style="padding-bottom:0px;">
 	<div class="container-fluid">
 		<?php $this->load->view('theme/navbar'); ?>
 		<?php $this->load->view('app/' . $content); ?>

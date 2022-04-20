@@ -48,7 +48,6 @@ class Kasir_model extends CI_Model
 
 	public function get_list_item_where($where)
 	{
-
 		$sql = "
 		SELECT
 			tblitem.item_id,
@@ -122,7 +121,7 @@ class Kasir_model extends CI_Model
 				'item_id'           => $item_id,
 				'item_code'         => $item_code,
 				'item_name'         => $item_name,
-				'foto_filename'     => $foto_filename,
+				'foto_filename'     => @getimagesize(ITEM_EXTERNAL_LINK . $foto_filename) ? ITEM_EXTERNAL_LINK . $foto_filename : base_url('assets/img/item/default.png'),
 				'unit_name'         => $unit_name,
 				'start_period'      => $start_period,
 				'buying_price'      => $buying_price,

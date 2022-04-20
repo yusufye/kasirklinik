@@ -30,6 +30,7 @@ class Login_model extends CI_Model
 		$data_session = [
 			APP_ABBR . 'user_id'   => $arr_users->row()->user_id,
 			APP_ABBR . 'username'  => $arr_users->row()->username,
+			APP_ABBR . 'name'      => $arr_users->row()->fullname,
 			APP_ABBR . 'branch_id' => $arr_users->row()->branch_id,
 		];
 		$this->session->set_userdata($data_session);
@@ -48,6 +49,7 @@ class Login_model extends CI_Model
 		$data_session = [
 			APP_ABBR . 'user_id',
 			APP_ABBR . 'username',
+			APP_ABBR . 'name',
 			APP_ABBR . 'branch_id',
 		];
 		$this->session->unset_userdata($data_session);

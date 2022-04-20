@@ -73,6 +73,16 @@
 			}
 		})
 
+		$('#pagination').on('click', 'a', function(e) {
+			e.preventDefault();
+			let offset = $(this).attr('data-ci-pagination-page');
+			if (offset != undefined) {
+				renderCard(category_id, offset)
+			}
+		})
+
+		renderCard('default', 0)
+
 		$('#barcode').on('change', e => {
 			e.preventDefault()
 			let barcode = $('#barcode').val()
@@ -158,6 +168,68 @@
 </script>
 
 <script>
+	function renderItemByCategory(id) {
+		$('#group_category button.active').removeClass('active');
+		$(`#category_${id}`).addClass('active')
+		category_id = id
+		renderCard(category_id, 0)
+	}
+
+	function renderCard(category_id, offset) {
+		$.ajax({
+			url: `<?= base_url(); ?>kasir/get_card/${category_id}/${offset}`,
+			type: 'get',
+			dataType: 'json',
+			beforeSend: () => $('#group_card').parent().block({
+				message: `<i class="fas fa-spinner fa-spin"></i>`
+			}).attr('disabled', true)
+		}).fail(e => {
+			Swal.fire({
+				icon: 'warning',
+				html: e.responseText,
+			}).then(() => {
+				$('#group_card').parent().unblock()
+			})
+		}).done(e => {
+			$('#pagination').html(e.pagination);
+			createTable(e.result, e.row)
+		})
+	}
+
+	function createTable(result, sno) {
+		sno = Number(sno);
+		$('#group_card').empty();
+		for (index in result) {
+			let item_id = result[index].item_id;
+			let item_code = result[index].item_code;
+			let item_name = result[index].item_name;
+			let foto_filename = result[index].foto_filename;
+			let start_period = result[index].start_period;
+			let buying_price = result[index].buying_price;
+			let selling_price = result[index].selling_price;
+			let buying_price_idr = result[index].buying_price_idr;
+			let selling_price_idr = result[index].selling_price_idr;
+			sno += 1;
+
+			let htmlnya = `
+			<div class="col col-md-3 my-2">
+				<div class="card" style="min-height: 40px; height: 100%;" onClick="tambahKeranjang(${item_code})" role="button">
+					<img class="card-img-top img-fluid" src="${foto_filename}" alt="${item_name}">
+					<div class="card-body">
+						<h5 class="card-title text-center" style="font-size: 0.7rem;"><strong>${item_name}</strong></h5>
+					</div>
+					<div class="card-footer text-right">
+						<p class="card-text"><strong>Rp.${selling_price_idr}</strong></p>
+					</div>
+				</div>
+			</div>
+			`
+			$('#group_card').append(htmlnya);
+		}
+
+		$('#group_card').parent().unblock()
+	}
+
 	function tambahKeranjang(barcode) {
 		$.ajax({
 			url: `<?= base_url(); ?>kasir/get_item/${barcode}`,
@@ -220,7 +292,6 @@
 						let selling_price_idr = k.selling_price_idr
 						let unit_name = k.unit_name
 						let qty = k.qty
-						let foto_filename = k.foto_filename
 
 						let keranjang = JSON.parse(window.localStorage.getItem('keranjang'))
 						let hasil_pencarian = keranjang.find(keranjang => keranjang.item_id == item_id)
@@ -234,7 +305,6 @@
 								selling_price_idr: selling_price_idr,
 								sub_total: selling_price,
 								sub_total_idr: selling_price_idr,
-								foto_filename: foto_filename,
 							}
 							keranjang.push(isian)
 							window.localStorage.setItem('keranjang', JSON.stringify(keranjang))
@@ -293,36 +363,26 @@
 		if (keranjang.length > 0) {
 			$.each(keranjang.reverse(), (i, k) => {
 				htmlnya += `
-				<div class="d-flex justify-content-between">
-					<div class="align-self-center">
-						<img src="${k.foto_filename}" class="img-thumbnail rounded" style="width: 80px; height: 80px;" />
-					</div>
-					<div class="align-self-center" style="max-width: 300px;">
-						<p>
-							${k.item_name}<br />
-							<small>Rp.${k.selling_price_idr}</small>
-						</p>
-					</div>
-					<div class="align-self-center">
-						<div class="input-group input-group-xs" style="width: 150px;">
-							<div class="input-group-prepend">
-								<button type="button" class="btn btn-danger btn-sm" onClick="decreseQty('qty_keranjang_${k.item_id}');"><i class="fas fa-minus"></i></button>
-							</div>
+				<tr>
+					<th style="width: 5px;">
+						<button type="button" class="btn btn-danger btn-sm" onClick="hapusKeranjang(${k.item_id}, '${k.item_name}')"><i class="fas fa-trash"></i></button>
+					</th>
+					<th>${k.item_name}</th>
+					<th class="text-right" style="width: 105px;">Rp.${k.selling_price_idr}</th>
+					<th style="width: 200px;">
+						<div class="input-group input-group-xs">
+						<div class="input-group-prepend">
+						<button type="button" class="btn btn-danger btn-sm" onClick="decreseQty('qty_keranjang_${k.item_id}');"><i class="fas fa-minus"></i></button>
+						</div>
 							<input type="text" min="1" onkeypress="return isNumberKey(event)" class="form-control qty_keranjang nonly" id="qty_keranjang_${k.item_id}" value="${k.qty}" onChange="updateQty('qty_keranjang_${k.item_id}', ${k.item_id});" />
 							<div class="input-group-append">
 								<span class="input-group-text">${k.satuan}</span>
 								<button type="button" class="btn btn-success btn-sm" onClick="increaseQty('qty_keranjang_${k.item_id}');"><i class="fas fa-plus"></i></button>
 							</div>
 						</div>
-					</div>
-					<div class="align-self-center">
-						<p>Rp.${k.sub_total_idr}</p>
-					</div>
-					<div class="align-self-center">
-						<button type="button" class="btn btn-danger mr-2" onClick="hapusKeranjang(${k.item_id}, '${k.item_name}')"><i class="fas fa-trash"></i></button>
-					</div>
-				</div>
-				<hr />
+					</th>
+					<th class="text-right" style="width: 105px;">Rp.${k.sub_total_idr}</th>
+				</tr>
 				`
 
 				total += parseInt(k.sub_total)
@@ -339,7 +399,7 @@
 
 	function renderTotal() {
 		let total = JSON.parse(window.localStorage.getItem('total'))
-		$('.grand_total').text(new Intl.NumberFormat('id-ID', {
+		$('#grand_total').text(new Intl.NumberFormat('id-ID', {
 			style: 'currency',
 			currency: 'IDR',
 			minimumFractionDigits: 0
@@ -386,11 +446,8 @@
 					item_name: k.item_name,
 					qty: k.qty,
 					satuan: k.satuan,
-					selling_price: k.selling_price,
-					selling_price_idr: k.selling_price_idr,
 					sub_total: k.sub_total,
 					sub_total_idr: k.sub_total_idr,
-					foto_filename: k.foto_filename,
 				}
 				newKeranjang.push(isian)
 			}
@@ -809,7 +866,7 @@
 
 		window.localStorage.setItem('grand_total', grand_total_finale)
 
-		$('.grand_total').text(new Intl.NumberFormat('id-ID', {
+		$('#grand_total_finale').text(new Intl.NumberFormat('id-ID', {
 			style: 'currency',
 			currency: 'IDR',
 			minimumFractionDigits: 0
