@@ -54,13 +54,11 @@
 
 		$('#item_code').select2({
 			placeholder: 'Cari Item',
-			theme: 'bootstrap4',
 			allowClear: true
 		})
 
 		$('#bank').select2({
 			placeholder: 'Pilih Bank',
-			theme: 'bootstrap4',
 			allowClear: true
 		})
 

@@ -28,7 +28,7 @@
 
 	<!-- Select2 -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="<?= base_url('assets/css/select2-bootstrap4.min.css'); ?>" />
+	<!-- <link rel="stylesheet" href="<?= base_url('assets/css/select2-bootstrap4.min.css'); ?>" /> -->
 
 	<!-- Background Css -->
 	<link rel="stylesheet" href="<?= base_url('assets/css/bg.css'); ?>" />
@@ -76,6 +76,18 @@
 
 		.swal2-html-container {
 			font-size: .8em !important;
+		}
+
+		.select2-selection__rendered {
+			line-height: 31px !important;
+		}
+
+		.select2-container .select2-selection--single {
+			height: 35px !important;
+		}
+
+		.select2-selection__arrow {
+			height: 34px !important;
 		}
 	</style>
 </head>
