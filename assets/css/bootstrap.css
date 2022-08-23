@@ -9349,5 +9349,5 @@ a.text-dark:focus {
 
 .input-group-xs > .form-control:not(textarea),
 .input-group-xs > .custom-select {
-	height: calc(1em + 0.5rem + 1px);
+	height: calc(2em + 0.5rem + 1px);
 }
