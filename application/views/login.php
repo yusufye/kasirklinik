@@ -56,7 +56,7 @@
 				</div>
 			<?php } ?>
 			<div class="illustration">
-				<img src="<?= base_url('assets/img/logo swr frozen food.jpeg'); ?>" alt="Logo SWR Frozen Food" class="img-fluid" />
+				<img src="<?= base_url('assets/img/logo toto.png'); ?>" alt="Logo TOTO" class="img-fluid" />
 			</div>
 			<div class="form-group">
 				<input class="form-control" type="text" id="username" name="username" placeholder="Username" required>
