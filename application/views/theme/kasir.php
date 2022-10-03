@@ -89,12 +89,72 @@
 		.select2-selection__arrow {
 			height: 34px !important;
 		}
+
+		body {
+  height: 100%;
+  overflow-x: hidden;
+  font-family: sans-serif;
+  
+}
+
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+
+.navbar {
+  background: linear-gradient(to top right,#663f91,#663f91);
+  /*position: fixed;*/
+}
+
+@media (min-width: 768px) {
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+  }
+}
 	</style>
 </head>
 
-<body class="bg-primary" style="padding-bottom:0px;">
+<body class="bg-light" style="padding-bottom:0px;">
+<div class="d-flex" id="wrapper">
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-success border-bottom">
+	  	<a class="navbar-brand text-white" href="#">
+		  <img src="<?php echo base_url('assets/img/logo_kranku_indonesia.png'); ?>" style="max-width:35px;"> Kranku Indonesia
+		</a>
+		<ul class="navbar-nav w-100">
+		<li class="nav-item dropdown ml-auto">
+			<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<img src="<?php echo base_url('assets/img/avatar-man.png'); ?>" style="max-width:35px;">
+			</a>
+			<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+				<a class="dropdown-item" href="#">	
+					<i class="fas fa-cash-register fa-fw"></i> Kasir
+				</a>
+				<a class="dropdown-item" href="#" onclick="modalLaporan()">
+					<i class="fas fa-file-alt fa-fw"></i> Laporan Penjualan
+				</a>
+				<a class="dropdown-item" onclick="modalPassword()" role="button">
+					<i class="fas fa-user fa-fw"></i> Ganti Password
+				</a>
+				<a class="dropdown-item" href="<?= base_url('logout'); ?>">
+					<i class="fas fa-sign-out-alt fa-fw"></i> <?= $this->session->userdata(APP_ABBR . 'name'); ?> Keluar
+				</a>
+			</div>
+		</li>
+		</ul>
+      </nav>
+	
 	<div class="container-fluid">
-		<?php $this->load->view('theme/navbar'); ?>
+		<?php //$this->load->view('theme/navbar'); ?>
 		<?php $this->load->view('app/' . $content); ?>
 	</div>
 
@@ -168,4 +228,9 @@
 			timer: 3000
 		})
 	}
+
+	$("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
 </script>

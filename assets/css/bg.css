@@ -1,17 +1,17 @@
 /* ===== Scrollbar CSS ===== */
 /* Firefox */
-* {
+/* * {
 	scrollbar-width: thin;
 	scrollbar-color: #2c489b rgba(255, 255, 255, 0.5);
-}
+} */
 
 /* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
+/* *::-webkit-scrollbar {
 	width: 14px;
 	height: 14px;
-}
+} */
 
-*::-webkit-scrollbar-track {
+/* *::-webkit-scrollbar-track {
 	background: rgba(255, 255, 255, 0.5);
 }
 
@@ -19,7 +19,7 @@
 	background-color: #2c489b;
 	border-radius: 1px;
 	border: 2px solid rgba(255, 255, 255, 1);
-}
+} */
 
 .kasir-bg {
 	background-color: #2c489b;

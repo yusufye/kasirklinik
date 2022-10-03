@@ -21,38 +21,44 @@
 						</select>
 					</div>
 				</div>
-				<div class="col-sm-12 col-md-4 text-right grand_total_view">
-					<span class="grand_total" id="v_gt">Rp 0</span>
+				<div class="col-sm-12 col-md-4">
+					<!-- <span class="grand_total" id="v_gt">Rp 0</span> -->
+					<button type="button" class="btn btn-success col-sm-6 col-md-5" id="btn_print" accesskey="p" title="Alt + P" disabled>
+											<i class="fas fa-print fa-fw"></i> Print Struk
+					</button>
+					<button type="button" class="btn btn-info col-sm-6 col-md-5" id="btn_transaksi_baru" accesskey="n" title="Alt + N" disabled>
+						<i class="fas fa-cart-plus fa-fw"></i> Transaksi Baru
+					</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-sm-12 col-md-8">
-			<div class="card mt-1 bg-dark">
-				<div class="card-header text-white text-center">
+			<div class="card mt-1 bg-white">
+				<!-- <div class="card-header text-white text-center">
 					<h5 style="font-size: 0.9rem;">Keranjang Belanja</h5>
-				</div>
-				<div class="card-body bg-secondary text-white pt-2 pr-3 pb-2 pl-3" style="min-height: 540px;">
-					<div id="v_keranjang" class="table-responsive" style="height: 540px; font-size: 0.9em; letter-spacing: 2px;">
+				</div> -->
+				<div class="card-body bg-white pt-2 pr-3 pb-2 pl-3" style="min-height: 500px;">
+					<div id="v_keranjang" class="table-responsive" style="height: 500px; font-size: 0.9em; letter-spacing: 2px;overflow-y: scroll;">
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-4">
-			<div class="card mt-1 bg-dark">
-				<div class="card-header text-white text-center">
+			<div class="card mt-1 bg-white">
+				<!-- <div class="card-header text-white text-center">
 					<h5 style="font-size: 1rem;">Pembayaran</h5>
-				</div>
-				<div class="card-body text-white">
+				</div> -->
+				<div class="card-body">
 					<div class="table-responsive">
-						<table class="table table-borderless text-white 2-100">
+						<table class="table table-borderless 2-100">
 							<tbody>
 								<tr>
 									<th>Metode Pembayaran</th>
 									<th class="text-right">
 										<div class="d-flex justify-content-end">
-											<select class="form-control form-control-sm" id="metode_pembayaran" name="metode_pembayaran" accesskey="m" title="Alt + M" style="width: 100px;">
+											<select class="form-control form-control-sm" id="metode_pembayaran" name="metode_pembayaran" accesskey="m" title="Alt + M">
 												<option value="tunai">Tunai</option>
 												<option value="debit">Debit</option>
 												<option value="kredit">Kredit</option>
@@ -64,7 +70,7 @@
 								<tr class="non_tunai_group" style="display: none;">
 									<th>Bank</th>
 									<th>
-										<select class="form-control w-100" id="bank" name="bank" data-placeholder="Pilih Bank">
+										<select class="form-control w-900" id="bank" name="bank" data-placeholder="Pilih Bank" style="width:100%;">
 											<option value=""></option>
 											<?php foreach ($arr_bank->result() as $key) { ?>
 												<option value="<?= $key->bank_id; ?>"><?= $key->bank_name; ?></option>
@@ -90,14 +96,14 @@
 										<textarea class=" form-control" id="catatan" name="catatan"></textarea>
 									</th>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<th>
 										Total
 									</th>
 									<th class="text-right">
 										<h5 id="grand_total"></h5>
 									</th>
-								</tr>
+								</tr> -->
 								<tr>
 									<th>
 										Diskon
@@ -137,7 +143,7 @@
 										Bayar
 									</th>
 									<th class="d-flex justify-content-end">
-										<input type="text" class="form-control form-control-sm" id="nominal_bayar" name="nominal_bayar" placeholder="Nominal Bayar" accesskey="u" title="Alt + U" style="width: 100px;" />
+										<input type="text" class="form-control form-control-sm" id="nominal_bayar" name="nominal_bayar" placeholder="Nominal Bayar" accesskey="u" title="Alt + U" />
 									</th>
 								</tr>
 								<tr>
@@ -151,14 +157,9 @@
 								<tr>
 									<th colspan="2" class="px-1 pt-4 pb-0">
 										<button type="button" class="btn btn-primary btn-block" id="btn_pembayaran" accesskey="s" title="Alt + S" disabled>
-											<i class="fas fa-file-invoice-dollar fa-fw"></i> Pembayaran
+											<i class="fas fa-file-invoice-dollar fa-fw"></i> Bayar
 										</button>
-										<button type="button" class="btn btn-success btn-block" id="btn_print" accesskey="p" title="Alt + P" disabled>
-											<i class="fas fa-print fa-fw"></i> Print Struk
-										</button>
-										<button type="button" class="btn btn-info btn-block" id="btn_transaksi_baru" accesskey="n" title="Alt + N" disabled>
-											<i class="fas fa-cart-plus fa-fw"></i> Transaksi Baru
-										</button>
+										
 									</th>
 								</tr>
 							</tbody>
@@ -203,7 +204,7 @@
 <!-- Modal Laporan -->
 <form id="form_laporan">
 	<div class="modal fade" id="modal_laporan" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-		<div class="modal-dialog" role="document">
+		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Laporan Penjualan</h5>

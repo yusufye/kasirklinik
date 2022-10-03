@@ -291,17 +291,17 @@
 		if (keranjang.length > 0) {
 			$.each(keranjang.reverse(), (i, k) => {
 				htmlnya += `
-				<div class="d-flex justify-content-between">
-					<div class="align-self-center">
+				<div class="row">
+					<div class="col-sm-2 col-md-2 col-xs-2 align-self-center">
 						<img src="${k.foto_filename}" class="img-thumbnail rounded" style="width: 80px; height: 80px;" />
 					</div>
-					<div class="align-self-center" style="max-width: 300px;">
+					<div class="col-sm-4 col-md-4 col-xs-4 align-self-center" style="max-width: 300px;">
 						<p>
 							${k.item_name}<br />
 							<small>Rp.${k.selling_price_idr}</small>
 						</p>
 					</div>
-					<div class="align-self-center">
+					<div class="col-sm-3 col-md-3 col-xs-3 align-self-center">
 						<div class="input-group input-group-xs" style="width: 150px;">
 							<div class="input-group-prepend">
 								<button type="button" class="btn btn-danger btn-sm" onClick="decreseQty('qty_keranjang_${k.item_id}');"><i class="fas fa-minus"></i></button>
@@ -313,11 +313,11 @@
 							</div>
 						</div>
 					</div>
-					<div class="align-self-center">
+					<div class="col-sm-2 col-md-2 col-xs-2 align-self-center">
 						<p>Rp.${k.sub_total_idr}</p>
 					</div>
-					<div class="align-self-center">
-						<button type="button" class="btn btn-danger mr-2" onClick="hapusKeranjang(${k.item_id}, '${k.item_name}')"><i class="fas fa-trash"></i></button>
+					<div class="col-sm-1 col-md-1 col-xs-1 align-self-center">
+						<button type="button" class="btn btn-danger btn-sm" onClick="hapusKeranjang(${k.item_id}, '${k.item_name}')"><i class="fas fa-trash"></i></button>
 					</div>
 				</div>
 				<hr />
